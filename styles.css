@@ -51,6 +51,7 @@ main {
   margin: 0.75rem;
   /* flex-basis: 1; */
   overflow: hidden;
+  position: relative;
 }
 
 .movie img {
@@ -87,4 +88,22 @@ main {
 
 .movie-info span.red {
   color: rgb(189, 42, 42);
+}
+
+.movie .overview {
+  position: absolute;
+  /* top: 0; */
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  padding: 1rem;
+  transform: translateY(100%);
+  overflow: hidden;
+  transition: transform 0.3s ease-in;
+}
+
+.movie:hover .overview {
+  transform: translateY(0);
+  top: 0;
 }

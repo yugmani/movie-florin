@@ -7,20 +7,38 @@ const SEARCHAPI = `https://api.themoviedb.org/3/search/movie?api_key=${api_key}&
 const mainEl = document.querySelector("main");
 const formEl = document.getElementById("form");
 const searchEl = document.querySelector(".search");
-// get the favorite movies
-getMovies();
 
-async function getMovies() {
-  const resp = await fetch(APIURL);
+// get the favorite movies
+getMovies(APIURL);
+
+// function to get movies list from api
+async function getMovies(url) {
+  const resp = await fetch(url);
   const respData = await resp.json();
   console.log(respData);
 
-  respData.results.forEach((movie) => {
+  showMovies(respData);
+  // return respData;
+}
+
+// function for movie outlay
+function showMovies(movies) {
+  //clear the main element initially
+  mainEl.innerHTML = "";
+
+  movies.results.forEach((movie) => {
     const movieEl = document.createElement("div");
     movieEl.classList.add("movie");
+    if (movie.poster_path === null) {
+      poster =
+        "https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-1-scaled-1150x647.png";
+    } else {
+      poster = IMGPATH + movie.poster_path;
+    }
+
     movieEl.innerHTML = `
     <img
-    src="${IMGPATH}${movie.poster_path}";
+    src="${poster}";
     alt=""
   />
   <div class="movie-info">
@@ -29,14 +47,17 @@ async function getMovies() {
       movie.vote_average
     }</span>
   </div>
+  <div class="overview">
+  <h4>Overview</h4>
+  ${movie.overview}
+  </div>
  `;
 
     mainEl.appendChild(movieEl);
   });
-
-  return respData;
 }
 
+// function to select class based on votes
 function getClassByRate(vote) {
   if (vote >= 8) {
     return "green";
@@ -47,8 +68,14 @@ function getClassByRate(vote) {
   }
 }
 
+// event listener to find the list of movies searched
 formEl.addEventListener("submit", (e) => {
   e.preventDefault();
 
   const searchTerm = searchEl.value;
+
+  if (searchTerm) {
+    getMovies(SEARCHAPI + searchTerm);
+    searchEl.value = "";
+  }
 });
