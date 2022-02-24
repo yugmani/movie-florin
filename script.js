@@ -2,7 +2,13 @@ const api_key = "046a7526cffd553aec9f3c6d073442a5";
 const APIURL = `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=free`;
 
 const IMGPATH = "https://image.tmdb.org/t/p/w500/";
+const SEARCHAPI = `https://api.themoviedb.org/3/search/movie?api_key=${api_key}&query=`;
+
 const mainEl = document.querySelector("main");
+const formEl = document.getElementById("form");
+const searchEl = document.querySelector(".search");
+// get the favorite movies
+getMovies();
 
 async function getMovies() {
   const resp = await fetch(APIURL);
@@ -31,8 +37,6 @@ async function getMovies() {
   return respData;
 }
 
-getMovies();
-
 function getClassByRate(vote) {
   if (vote >= 8) {
     return "green";
@@ -42,3 +46,9 @@ function getClassByRate(vote) {
     return "red";
   }
 }
+
+formEl.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const searchTerm = searchEl.value;
+});
